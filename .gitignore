@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and model artifacts
+data/
+dataset/
+weights/*
+!weights/README.md
+*.pt
+*.pth
+*.ckpt
+*.onnx
+**/finetune_outputs/
+**/training_log*.csv
+
+# Logs and outputs
+runs/
+outputs/
+logs/
+reports/latex_oil_spill_report/
+*.pdf
+*.tex
+*.pptx
+*.log
+
+# Local agent/skill files
+.agents/
+skills-lock.json
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

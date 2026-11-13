@@ -1,0 +1,97 @@
+CHANGE NOTE - Development experiments for oil-spill SAR segmentation
+Date: 2026-06-26
+
+Scope requested:
+- Use existing checkpoints and code to implement:
+  3) threshold search
+  5) quantitative ensemble
+  6) post-processing after inference
+- Prepare item 8 as a fine-tuning path for Quang's DeepLabV3+ code, but do not train it yet.
+- Re-run validation and export necessary charts/visualizations.
+
+Files added/changed:
+1. Added src/evaluation/development_eval.py
+   - Loads the existing checkpoints for DeepLabV3+ and UNet++.
+   - Runs validation on dataset/images/images/val and dataset/masks/masks/val.
+   - Performs threshold search from 0.25 to 0.80 with step 0.05.
+   - Evaluates probability-map ensemble by averaging the model outputs.
+   - Evaluates post-processing at each model's best raw threshold.
+   - Exports CSV tables, metric charts and qualitative visual grids.
+
+2. Added src/inference/postprocess.py
+   - Implements postprocess_mask(mask, min_area=64, open_kernel=3, close_kernel=5).
+   - Uses morphological opening, morphological closing and connected-component filtering.
+   - Returns a clean binary mask with values 0/1.
+
+3. Added notebooks/Quang/finetune_deeplabv3plus_tversky.py
+   - Fine-tuning script for DeepLabV3+ ResNet34.
+   - Starts from notebooks/Quang/checkpoints/quang_best_deeplabv3plus_checkpoint.pth by default.
+   - Supports bce_dice, tversky, focal_tversky and bce_tversky losses.
+   - Default fine-tune setup uses focal_tversky with alpha=0.3, beta=0.7, gamma=0.75.
+   - Freezes encoder for the first 2 epochs by default, then unfreezes for adaptation.
+   - Saves logs and best fine-tuned checkpoint to notebooks/Quang/finetune_outputs.
+
+4. Updated reports/results.md
+   - Filled the result table with the new full-validation metrics.
+   - Added ensemble and ensemble + post-processing results.
+
+Validation command used:
+.venv\Scripts\python.exe src\evaluation\development_eval.py --batch-size 8 --num-visuals 6
+
+Validation environment:
+- Device: cuda
+- GPU: NVIDIA GeForce RTX 2050
+- Validation images: 1615
+- Input size: 256 x 256
+- Thresholds searched: 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80
+
+Full-validation best raw results:
+- DeepLabV3+ ResNet34:
+  threshold=0.50, Dice=0.8832, IoU=0.7909, Precision=0.8663, Recall=0.9009
+- UNet++ EfficientNet-B4:
+  threshold=0.65, Dice=0.8960, IoU=0.8115, Precision=0.8892, Recall=0.9028
+- Ensemble average:
+  threshold=0.50, Dice=0.9026, IoU=0.8225, Precision=0.8904, Recall=0.9151
+
+Post-processing results at best raw threshold:
+- DeepLabV3+ post-process:
+  threshold=0.50, Dice=0.8835, IoU=0.7914, Precision=0.8662, Recall=0.9016
+- UNet++ post-process:
+  threshold=0.65, Dice=0.8963, IoU=0.8120, Precision=0.8892, Recall=0.9034
+- Ensemble + post-process:
+  threshold=0.50, Dice=0.9027, IoU=0.8226, Precision=0.8903, Recall=0.9154
+
+Generated outputs:
+- reports/development_experiments/threshold_search_results.csv
+- reports/development_experiments/best_results.csv
+- reports/development_experiments/threshold_dice_curves.png
+- reports/development_experiments/best_metrics_comparison.png
+- reports/development_experiments/visuals/development_visual_*.png
+
+How to re-run development validation:
+.venv\Scripts\python.exe src\evaluation\development_eval.py --batch-size 8 --num-visuals 6
+
+Quick smoke test command:
+.venv\Scripts\python.exe src\evaluation\development_eval.py --limit 16 --batch-size 4 --num-visuals 2
+
+How to fine-tune Quang DeepLabV3+ later:
+cd notebooks\Quang
+..\..\.venv\Scripts\python.exe finetune_deeplabv3plus_tversky.py --epochs 20
+
+Quick baseline check without training:
+cd notebooks\Quang
+..\..\.venv\Scripts\python.exe finetune_deeplabv3plus_tversky.py --epochs 0
+
+Recommended fine-tune interpretation:
+- This is item 8 in the development plan.
+- It should be reported as an attempt to handle class imbalance more directly.
+- Focal Tversky uses beta > alpha to penalize false negatives more strongly, which matches the oil-spill monitoring goal of reducing missed spill pixels.
+- Fine-tuning is not required for threshold search, ensemble or post-processing; it is a separate improvement direction.
+
+DeepLabV3+ fine-tune stability update:
+- The fine-tune script now reads from D:\HocSAu\dataset by default through --dataset-root.
+- Validation metrics are computed from global TP/FP/FN/TN over the whole validation set, matching the development evaluation style.
+- Epoch 0 is logged and saved as the initial loaded checkpoint before any fine-tuning.
+- Default fine-tuning now uses BCE + Tversky loss for steadier early epochs.
+- The encoder stays frozen for the first 4 epochs by default; after unfreezing, encoder LR is lower than decoder LR.
+- A baseline-only run on 2026-06-26 gave DeepLabV3+ val Dice=0.8832, IoU=0.7909, Precision=0.8663, Recall=0.9009.
