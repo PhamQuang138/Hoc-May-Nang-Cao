@@ -31,8 +31,9 @@ weights/*
 runs/
 outputs/
 logs/
-reports/latex_oil_spill_report/
+/reports/latex_oil_spill_report/*
 *.pdf
+!/reports/latex_oil_spill_report/baocao.pdf
 *.tex
 *.pptx
 *.log
