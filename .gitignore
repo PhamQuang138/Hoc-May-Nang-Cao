@@ -34,6 +34,7 @@ logs/
 /reports/latex_oil_spill_report/*
 *.pdf
 !/reports/latex_oil_spill_report/baocao.pdf
+!/reports/latex_oil_spill_report/Thuyettrinh.pdf
 *.tex
 *.pptx
 *.log

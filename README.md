@@ -22,6 +22,10 @@ Dự án xây dựng pipeline phát hiện và phân đoạn vùng nghi loang d�
 ├── notebooks/
 │   ├── Quang/                        # Script train/evaluate/fine-tune DeepLabV3+
 │   └── Khoa/                         # Notebook, tài nguyên và kết quả UNet++
+├── reports/
+│   └── latex_oil_spill_report/
+│       ├── baocao.pdf                # Báo cáo đồ án
+│       └── Thuyettrinh.pdf           # Slide thuyết trình
 ├── src/
 │   ├── evaluation/
 │   │   └── development_eval.py       # Đánh giá threshold, ensemble, hậu xử lý
@@ -35,6 +39,11 @@ Dự án xây dựng pipeline phát hiện và phân đoạn vùng nghi loang d�
 ├── requirements.txt                  # Thư viện cần cài
 └── README.md
 ```
+
+### Báo cáo và slide thuyết trình
+
+- [Báo cáo đồ án (PDF)](reports/latex_oil_spill_report/baocao.pdf)
+- [Slide thuyết trình (PDF)](reports/latex_oil_spill_report/Thuyettrinh.pdf)
 
 ## Mô hình
 
