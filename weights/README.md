@@ -2,11 +2,7 @@
 
 
 
-Tải checkpoint đã train từ Google Drive:
-
-```text
-Google Drive: TODO: https://drive.google.com/drive/folders/1gGlfn9oDPecxgXpSQkkypruZ1C5bKBmS?usp=sharing
-```
+[Tải checkpoint đã huấn luyện từ Google Drive](https://drive.google.com/drive/folders/1hRYmb8p108v7knTkRCOLlxqu1JuEc3BG?usp=sharing).
 
 Sau khi tải, đặt các file trong thư mục này với đúng tên:
 

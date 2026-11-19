@@ -71,9 +71,7 @@ Nếu dùng CUDA, hãy cài bản PyTorch phù hợp với GPU trước hoặc k
 
 Checkpoint mô hình không được commit lên Git để giữ repository và file ZIP tải từ GitHub nhẹ. Tải các checkpoint đã train từ Google Drive, sau đó đặt vào thư mục `weights/` với đúng tên:
 
-```text
-Google Drive: TODO: https://drive.google.com/drive/folders/1gGlfn9oDPecxgXpSQkkypruZ1C5bKBmS?usp=sharing
-```
+[Tải checkpoint trên Google Drive](https://drive.google.com/drive/folders/1hRYmb8p108v7knTkRCOLlxqu1JuEc3BG?usp=sharing)
 
 ```text
 weights/
